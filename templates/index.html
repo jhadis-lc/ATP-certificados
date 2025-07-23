@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Certificados QR</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e9f7ef;
+            border-radius: 5px;
+            display: none;
+        }
+        .qr-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .qr-container img {
+            max-width: 300px;
+            height: auto;
+        }
+        .certificate-id {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            text-align: center;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generador de Certificados QR</h1>
+        
+        <form id="certificateForm">
+            <div class="form-group">
+                <label for="recipient_name">Nombre del Recipiente:</label>
+                <input type="text" id="recipient_name" name="recipient_name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="course_name">Nombre del Curso/Certificado:</label>
+                <input type="text" id="course_name" name="course_name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="date">Fecha:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+            
+            <button type="submit">Generar Certificado QR</button>
+        </form>
+        
+        <div id="result" class="result">
+            <h3>Certificado Generado Exitosamente</h3>
+            <div class="certificate-id" id="certificateId"></div>
+            <div class="qr-container">
+                <img id="qrImage" src="" alt="Código QR del Certificado">
+            </div>
+            <p><strong>URL de Verificación:</strong> <span id="verificationUrl"></span></p>
+            <p><strong>Instrucciones:</strong> Descarga el código QR y pégalo en tu diseño de Canva. El enlace QR apunta a la URL de verificación.</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('certificateForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            fetch('/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    recipient_name: document.getElementById('recipient_name').value,
+                    course_name: document.getElementById('course_name').value,
+                    date: document.getElementById('date').value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('certificateId').textContent = data.certificate_id;
+                document.getElementById('qrImage').src = data.qr_url;
+                document.getElementById('verificationUrl').textContent = data.verification_url;
+                document.getElementById('result').style.display = 'block';
+                
+                // Scroll to results
+                document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al generar el certificado');
+            });
+        });
+    </script>
+</body>
+</html>
