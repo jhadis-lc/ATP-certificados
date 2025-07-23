@@ -45,7 +45,7 @@ def generate_certificate():
     certificate_id = generate_certificate_id()
     
     # URL base (debes cambiar esto por tu dominio de GitHub Pages)
-    base_url = "https://jhadis-lc.github.io/ATP-certificados/"
+    base_url = "https://jhadis-lc.github.io/ATP-certificados/verify"
     verification_url = f"{base_url}?id={certificate_id}"
     
     # Generar QR
