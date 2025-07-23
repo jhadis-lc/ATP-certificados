@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificar Certificado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .valid {
+            color: #28a745;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+        .invalid {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+        .status {
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .certificate-id {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Verificación de Certificado</h1>
+        
+        {% if certificate_id %}
+            <div class="status valid">
+                <h2>✓ Certificado Válido</h2>
+                <p>ID del Certificado: <span class="certificate-id">{{ certificate_id }}</span></p>
+                <p>Este certificado es válido y auténtico.</p>
+            </div>
+        {% else %}
+            <div class="status invalid">
+                <h2>✗ Certificado No Encontrado</h2>
+                <p>No se encontró un certificado con ese ID.</p>
+            </div>
+        {% endif %}
+        
+        <button onclick="window.history.back()">Volver</button>
+    </div>
+</body>
+</html>
